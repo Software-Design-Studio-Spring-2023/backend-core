@@ -12,10 +12,11 @@ I will be spitting this repo into two distinct components:
         a. Training the model and generating a encoded file that will be used for facial recognition.
         b. Handling input from the client and running it through the facial_recognition package to detect faces, and serving the processed response back to the client
 
+## 1. Target Architecture
 The client subrepo will be following clean architecture principles, which contains three components.
     ![Onion Architecture](https://miro.medium.com/v2/resize:fit:924/format:webp/1*0Pg6_UsaKiiEqUV3kf2HXg.png)
 
-    a. domain
+### a. domain
 
         The domain layer is the innermost layer of the architecture.
 
@@ -27,7 +28,7 @@ The client subrepo will be following clean architecture principles, which contai
 
         It will contain any interfaces/schema definitions, business logic, but never any implementation or code logic.
 
-    b. infrastructure
+### b. infrastructure
 
         This layer implements the business logic that is defined in the domain layer. 
         
@@ -35,7 +36,7 @@ The client subrepo will be following clean architecture principles, which contai
 
         ![Control Flow in Clean Architecture](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*jH0iI7-MSQYgLUrqTUm6mg.png)
 
-    c. gateways
+### c. gateways
 
         This layer is easy. It contains any logic that is needed to communicate with services outside of the application.
 
