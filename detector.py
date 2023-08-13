@@ -98,4 +98,12 @@ def _display_face(draw, bounding_box, name):
         fill="white",
     )
 
-recognize_faces("michael.jpeg")
+def validate(model: str = "hog"):
+    for filepath in Path("validation").rglob("*"):
+        if filepath.is_file():
+            recognize_faces(
+                image_location=str(filepath.absolute()), model=model
+            )
+
+# Removed recognize_faces("unknown.jpg")
+validate()
