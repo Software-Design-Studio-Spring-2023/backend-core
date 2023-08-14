@@ -1,16 +1,17 @@
 from pathlib import Path
 import face_recognition
 import pickle
+import os
 
+cwd = Path(__file__).parent.resolve().as_posix() + "/"
 
-
-Path("server/training").mkdir(exist_ok=True)
-Path("server/output").mkdir(exist_ok=True)
-Path("server/validation").mkdir(exist_ok=True)
+Path(cwd + "training").mkdir(exist_ok=True)
+Path(cwd + "output").mkdir(exist_ok=True)
+Path(cwd + "validation").mkdir(exist_ok=True)
 
 
 class FaceEncoder:
-    DEFAULT_ENCODINGS_PATH = Path("server/output/encodings.pkl")
+    DEFAULT_ENCODINGS_PATH = Path(cwd + "/output/encodings.pkl")
     def encode_known_faces(
         model: str = "hog", encodings_location: Path = DEFAULT_ENCODINGS_PATH
     ) -> None:
@@ -21,7 +22,7 @@ class FaceEncoder:
         """
         names = []
         encodings = []
-        for filepath in Path("server/training").glob("*/*"):
+        for filepath in Path(cwd + "/training").glob("*/*"):
             name = filepath.parent.name
             image = face_recognition.load_image_file(filepath)
 

@@ -7,6 +7,8 @@ from PIL import Image, ImageDraw
 import face_recognition
 from werkzeug.datastructures import FileStorage
 
+# get pwd
+cwd = Path(__file__).parent.resolve().as_posix() + "/"  
 
 class FaceDetector:
     """
@@ -15,7 +17,7 @@ class FaceDetector:
 
     BOUNDING_BOX_COLOR = "blue"
     TEXT_COLOR = "white"
-    DEFAULT_ENCODINGS_PATH = Path("server/output/encodings.pkl")
+    DEFAULT_ENCODINGS_PATH = Path(cwd + "output/encodings.pkl")
 
     def __init__(self) -> None:
         pass
@@ -31,7 +33,7 @@ class FaceDetector:
         Load unknown files and classifies them using the encoding created from
         encode_known_faces.
         """
-        tempPath = Path("server/processing/temp.jpg")
+        tempPath = Path(cwd + "processing/temp.jpg")
         with encodings_location.open(mode="rb") as f:
             loaded_encodings = pickle.load(f)
 
@@ -55,12 +57,11 @@ class FaceDetector:
                 name = "Unknown"
             self._display_face(draw, bounding_box, name)
             print(name, bounding_box)
-        pillow_image.show()
-        output = BytesIO()
-        pillow_image.save(output, format="JPEG")
-        hex_data = output.getvalue()
+        # pillow_image.show()
+        image_bytes = BytesIO()
+        pillow_image.save(image_bytes, format="JPEG")
         os.remove(tempPath)
-        return name, hex_data
+        return name, image_bytes
 
     def _recognize_face(self, unknown_encoding, loaded_encodings):
         """
