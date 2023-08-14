@@ -2,7 +2,7 @@ from pathlib import Path
 import face_recognition
 import pickle
 
-DEFAULT_ENCODINGS_PATH = Path("output/encodings.pkl")
+
 
 Path("training").mkdir(exist_ok=True)
 Path("output").mkdir(exist_ok=True)
@@ -10,6 +10,7 @@ Path("validation").mkdir(exist_ok=True)
 
 
 class FaceEncoder:
+    DEFAULT_ENCODINGS_PATH = Path("output/encodings.pkl")
     def encode_known_faces(
         model: str = "hog", encodings_location: Path = DEFAULT_ENCODINGS_PATH
     ) -> None:
