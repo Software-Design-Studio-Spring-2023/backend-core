@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import BinaryIO
 import face_recognition
 import pickle
 import os
@@ -36,3 +37,14 @@ class FaceEncoder:
         name_encodings = {"names": names, "encodings": encodings}
         with encodings_location.open(mode="wb") as f:
             pickle.dump(name_encodings, f)
+
+    def add_student(
+        self, label: str, image: BinaryIO, encodings_location: Path = DEFAULT_ENCODINGS_PATH
+    ) -> None:
+        """
+        Adds a new image to the training set.
+        """
+        Path(cwd + "training/" + label).mkdir(exist_ok=True)
+        image.save(cwd + "training/" + label + "/img_" + str(len(os.listdir(cwd + "training/" + label)) + 1) + ".jpeg")
+        FaceEncoder.encode_known_faces()
+    

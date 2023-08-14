@@ -39,5 +39,18 @@ def recognise():
     except Exception as e:
         return {"error": str(e)}
     
+@app.route('/add', methods=['POST'])
+def add():
+    """
+    Adds a new image to the training set.
+    """
+    label = request.form['label']
+    image = request.files['image']
+    try:
+        FaceEncoder.add_student(label, image)
+        return jsonify({"message": "Image added"})
+    except Exception as e:
+        return jsonify({"error": str(e)})
+    
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=8080)
