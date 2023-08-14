@@ -4,13 +4,13 @@ import pickle
 
 
 
-Path("training").mkdir(exist_ok=True)
-Path("output").mkdir(exist_ok=True)
-Path("validation").mkdir(exist_ok=True)
+Path("server/training").mkdir(exist_ok=True)
+Path("server/output").mkdir(exist_ok=True)
+Path("server/validation").mkdir(exist_ok=True)
 
 
 class FaceEncoder:
-    DEFAULT_ENCODINGS_PATH = Path("output/encodings.pkl")
+    DEFAULT_ENCODINGS_PATH = Path("server/output/encodings.pkl")
     def encode_known_faces(
         model: str = "hog", encodings_location: Path = DEFAULT_ENCODINGS_PATH
     ) -> None:
@@ -21,7 +21,7 @@ class FaceEncoder:
         """
         names = []
         encodings = []
-        for filepath in Path("training").glob("*/*"):
+        for filepath in Path("server/training").glob("*/*"):
             name = filepath.parent.name
             image = face_recognition.load_image_file(filepath)
 

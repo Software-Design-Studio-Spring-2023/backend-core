@@ -15,7 +15,10 @@ class FaceDetector:
 
     BOUNDING_BOX_COLOR = "blue"
     TEXT_COLOR = "white"
-    DEFAULT_ENCODINGS_PATH = Path("output/encodings.pkl")
+    DEFAULT_ENCODINGS_PATH = Path("server/output/encodings.pkl")
+
+    def __init__(self) -> None:
+        pass
 
     def recognise_faces(
         self,
@@ -28,7 +31,7 @@ class FaceDetector:
         Load unknown files and classifies them using the encoding created from
         encode_known_faces.
         """
-        tempPath = Path("processing/temp.jpg")
+        tempPath = Path("server/processing/temp.jpg")
         with encodings_location.open(mode="rb") as f:
             loaded_encodings = pickle.load(f)
 
@@ -59,7 +62,7 @@ class FaceDetector:
         os.remove(tempPath)
         return name, hex_data
 
-    def _recognize_face(unknown_encoding, loaded_encodings):
+    def _recognize_face(self, unknown_encoding, loaded_encodings):
         """
         Compares the unknown encoding to the known encodings and returns the name.
         Returns the most highest voted name.

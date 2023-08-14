@@ -1,8 +1,10 @@
 from pathlib import Path
 from flask import Flask, jsonify, request
-from FaceEncoder import FaceEncoder
-from FaceDetector import FaceDetector
+from FaceEncoder import FaceEncoder as FaceEncoderClass
+from FaceDetector import FaceDetector as FaceDetectorClass
 
+FaceDetector = FaceDetectorClass()
+FaceEncoder = FaceEncoderClass()
 app = Flask(__name__)
 
 @app.route('/', methods=['GET', 'POST'])
@@ -18,12 +20,12 @@ def encode():
     """
     model = "hog"
     try:
-        FaceEncoder.encode_known_faces(model)
+        FaceEncoder.encode_known_faces()
         return jsonify({"message": "Encoding complete"})
     except Exception as e:
         return jsonify({"error": str(e)})
     
-@app.route('/recognise', methods=['GET', 'POST'])
+@app.route('/recognise', methods=['POST'])
 def recognise():
     """
     TODO: create request schema validation
@@ -34,7 +36,7 @@ def recognise():
     img = request.files['image']
     # encodings_location = FaceDetector.DEFAULT_ENCODINGS_PATH
     try:
-        names, image = FaceDetector.recognise_faces(img)
+        names, image = FaceDetector.recognise_faces(image_file=img)
         return {"names": names, "image": image}
     except Exception as e:
         return {"error": str(e)}
