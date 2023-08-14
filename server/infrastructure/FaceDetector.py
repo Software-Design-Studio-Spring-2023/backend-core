@@ -10,7 +10,7 @@ from werkzeug.datastructures import FileStorage
 # get pwd
 cwd = Path(__file__).parent.resolve().as_posix() + "/"  
 
-class FaceDetector:
+class FaceDetector():
     """
     Class for detecting faces in images.
     """
@@ -27,7 +27,7 @@ class FaceDetector:
         image_file: FileStorage,
         model: str = "hog",
         encodings_location: Path = DEFAULT_ENCODINGS_PATH,
-    ) -> ImageDraw:
+    ) -> (str, BytesIO):
         """
         TODO: Pass in image as BinaryIO instead of filepath.
         Load unknown files and classifies them using the encoding created from
@@ -78,26 +78,6 @@ class FaceDetector:
         )
         if votes:
             return votes.most_common(1)[0][0]
-
-    def _display_face(self, draw, bounding_box, name):  # dont actually want to use this
-        """
-        Draws the bounding box and the name of the face.
-        """
-        top, right, bottom, left = bounding_box
-        draw.rectangle(((left, top), (right, bottom)), outline=self.BOUNDING_BOX_COLOR)
-        text_left, text_top, text_right, text_bottom = draw.textbbox(
-            (left, bottom), name
-        )
-        draw.rectangle(
-            ((text_left, text_top), (text_right, text_bottom)),
-            fill="blue",
-            outline="blue",
-        )
-        draw.text(
-            (text_left, text_top),
-            name,
-            fill="white",
-        )
 
     def validate(self, model: str = "hog"):
         """
