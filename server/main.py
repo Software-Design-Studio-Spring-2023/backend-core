@@ -1,17 +1,24 @@
-from pathlib import Path
-from flask import Flask, jsonify, request
+import socketio
+import websockets
+import asyncio
+import threading
+from flask import Flask, Response, jsonify, request, render_template
+import numpy as np
 from infrastructure.FaceEncoder import FaceEncoder as FaceEncoderClass
 from infrastructure.FaceDetector import FaceDetector as FaceDetectorClass
 
 FaceDetector = FaceDetectorClass()
 FaceEncoder = FaceEncoderClass()
 app = Flask(__name__)
+sio = socketio.Client()
 
-@app.route('/', methods=['GET', 'POST'])
+
+@app.route("/", methods=["GET", "POST"])
 def welcome():
     return "Hello World!"
 
-@app.route('/encode', methods=['GET', 'POST'])
+
+@app.route("/encode", methods=["GET", "POST"])
 def encode():
     """
     Encodes the faces contained in ./training/{label}/img_{num}.jpeg
@@ -24,33 +31,36 @@ def encode():
         return jsonify({"message": "Encoding complete"})
     except Exception as e:
         return jsonify({"error": str(e)})
-    
-@app.route('/recognise', methods=['POST'])
+
+
+@app.route("/recognise", methods=["POST"])
 def recognise():
     """
     TODO: create request schema validation
     Load unknown files and classify them using the encoding created from
     encode_known_faces.
     """
-    img = request.files['image']
+    img = request.files["image"]
     try:
         names, image = FaceDetector.recognise_faces(image_file=img)
         return jsonify({"names": names, "authenticated": True})
     except Exception as e:
         return {"error": str(e)}
-    
-@app.route('/add', methods=['POST'])
+
+
+@app.route("/add", methods=["POST"])
 def add():
     """
     Adds a new image to the training set.
     """
-    label = request.form['label']
-    image = request.files['image']
+    label = request.form["label"]
+    image = request.files["image"]
     try:
         FaceEncoder.add_student(label, image)
         return jsonify({"message": "Image added"})
     except Exception as e:
         return jsonify({"error": str(e)})
-    
-if __name__ == '__main__':
-    app.run(host='127.0.0.1', port=8080)
+
+
+if __name__ == "__main__":
+    app.run(host="127.0.0.1", port=8080)
