@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Video Streaming</title>
+</head>
+<body>
+    <img id="video-frame" src="" alt="Video Stream">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script type="text/javascript">
+        var socket = io.connect('http://' + '127.0.0.1' + ':' + '8080');
+
+        socket.on('connect', function() {
+            console.log('Socket connected');
+        });
+
+        socket.on('frame_data', function(data) {
+            console.log('Frame data received')
+            var img = document.getElementById('video-frame');
+            img.src = data.frame;
+        });
+
+        socket.on('message', function(data) {
+            console.log('Frame data received')
+        });
+
+        // Poll for frame updates every 500ms
+        setInterval(function() {
+            socket.emit('request_frame');
+        }, 500);
+    </script>
+</body>
+</html>

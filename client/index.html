@@ -1,16 +1,24 @@
 <html>
+
 <head>
     <title>Streamer</title>
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
+        integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
+        crossorigin="anonymous"></script>
 </head>
+
 <body>
     <video autoplay></video>
     <script>
+        const WS_URL = 'http://127.0.0.1:8080'
+        var socketio = io.connect(WS_URL)
         // get video dom element
         const video = document.querySelector('video');
-        
+
         // request access to webcam
-        navigator.mediaDevices.getUserMedia({video: {width: 426, height: 240}}).then((stream) => video.srcObject = stream);
-        
+        navigator.mediaDevices.getUserMedia({ video: { width: 426, height: 240 } }).then((stream) => video.srcObject = stream);
+
         // returns a frame encoded in base64
         const getFrame = () => {
             const canvas = document.createElement('canvas');
@@ -18,17 +26,16 @@
             canvas.height = video.videoHeight;
             canvas.getContext('2d').drawImage(video, 0, 0);
             const data = canvas.toDataURL('image/png');
-            return data;
-        }
-        const WS_URL = 'ws:/127.0.0.1:8765'
+            return {frame: data};
+        };        
         const FPS = 10;
-        const ws = new WebSocket(WS_URL);
-        ws.onopen = () => {
+        socketio.on('connect', () => {
             console.log(`Connected to ${WS_URL}`);
             setInterval(() => {
-                ws.send(getFrame());
+                socketio.emit('frame', getFrame());
             }, 1000 / FPS);
-        }
+        });
     </script>
 </body>
+
 </html>
