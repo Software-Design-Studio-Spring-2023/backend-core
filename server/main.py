@@ -1,9 +1,5 @@
 from flask_socketio import SocketIO, emit, join_room
-import websockets
-import asyncio
-import threading
 from flask import Flask, Response, jsonify, request, render_template
-import numpy as np
 from infrastructure.FaceEncoder import FaceEncoder as FaceEncoderClass
 from infrastructure.FaceDetector import FaceDetector as FaceDetectorClass
 
@@ -32,7 +28,8 @@ def ack():
 def handle_frame(frame_data): # TODO: get client id and send to that client only, and the host application
      if request.sid in active_sessions:
         print('frame received')
-        emit('frame_data', frame_data, broadcast=True, callback=ack)
+        # for now we just publish to every client, but we should only publish to the host application and the client that sent the frame
+        emit('frame_data', frame_data, broadcast=True, callback=ack) 
         
 @app.route("/", methods=["GET", "POST"])
 def welcome():
