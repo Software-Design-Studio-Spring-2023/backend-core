@@ -1,5 +1,6 @@
 from flask_socketio import SocketIO, emit, join_room
 from flask import Flask, Response, jsonify, request, render_template
+from ObjectDetection import ObjectDetection
 from infrastructure.FaceEncoder import FaceEncoder as FaceEncoderClass
 from infrastructure.FaceDetector import FaceDetector as FaceDetectorClass
 
@@ -10,10 +11,15 @@ app.config['SECRET'] = 'password'
 socketio = SocketIO(app, cors_allowed_origins="*")
 
 active_sessions = {}
+registered_clients = {}
 
 @socketio.on('connect')
 def handle_connect():
     active_sessions[request.sid] = None
+    registered_clients[request.sid] = ObjectDetection(client_url=request.url)
+    registered_clients[request.sid].detect();
+    # register opencv VideoCapture object with the client url
+
     join_room(request.sid)
 
 @socketio.on('disconnect')
@@ -24,8 +30,9 @@ def handle_disconnect():
 def ack():
     print('message was received!')
 
+
 @socketio.on('frame')
-def handle_frame(frame_data): # TODO: get client id and send to that client only, and the host application
+def handle_frame(frame_data: dict[str, str]): # TODO: get client id and send to that client only, and the host application
      if request.sid in active_sessions:
         print('frame received')
         # for now we just publish to every client, but we should only publish to the host application and the client that sent the frame
