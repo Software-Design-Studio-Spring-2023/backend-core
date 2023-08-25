@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Video Streaming</title>
+</head>
+<body>
+    <h1>Supervisor View</h1>
+    <p>This listens to http://127.0.0.1:8080 (the python server) for frame data that 
+        is published by the students camera to http://127.0.0.1:8080.</p>
+    <img id="video-frame" src="" alt="Video Stream">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script type="text/javascript">
+        var socket = io.connect('http://' + '127.0.0.1' + ':' + '8080');
+
+        socket.on('connect', function() {
+            console.log('Socket connected');
+        });
+
+        socket.on('frame_data', function(data) {
+            console.log('Frame data received')
+            var img = document.getElementById('video-frame');
+            img.src = data.frame;
+        });
+
+        socket.on('message', function(data) {
+            console.log('Frame data received')
+        });
+
+        // Poll for frame updates every 500ms
+        setInterval(function() {
+            socket.emit('request_frame');
+        }, 500);
+    </script>
+</body>
+</html>
