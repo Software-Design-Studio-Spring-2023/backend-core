@@ -1,4 +1,8 @@
 .DS_Store
 __pycache__/
-```
-server/infrastructure/output/encodings.pkl
+
+./server/infrastructure/output/encodings.pkl
+
+./server/infrastructure/output/
+
+client/node_modules/

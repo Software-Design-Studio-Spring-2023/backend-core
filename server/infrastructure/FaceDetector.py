@@ -55,7 +55,7 @@ class FaceDetector():
             name = self._recognize_face(unknown_encoding, loaded_encodings)
             if not name:
                 name = "Unknown"
-            self._display_face(draw, bounding_box, name)
+            # self._display_face(draw, bounding_box, name)
             print(name, bounding_box)
         # pillow_image.show()
         image_bytes = BytesIO()
