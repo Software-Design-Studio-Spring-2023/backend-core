@@ -17,15 +17,15 @@ class ObjectDetectionWrapper:
         self.output_path = output_path
         self.frames_per_second = frames_per_second
         self.log_progress = log_progress
-        # self.video_detector = VideoObjectDetection()
-        self.detector = ObjectDetection()
         self.filename = self.student_id + ".avi"
+        self.frame_detector = ObjectDetection()
+        self.frame_detector.setModelTypeAsYOLOv3()
+        self.frame_detector.setModelPath(self.model_path)
+        self.frame_detector.loadModel()
+        # self.video_detector = VideoObjectDetection()
         # self.video_detector.setModelTypeAsYOLOv3()
         # self.video_detector.setModelPath(self.model_path)
         # self.video_detector.loadModel()
-        self.detector.setModelTypeAsYOLOv3()
-        self.detector.setModelPath(self.model_path)
-        self.detector.loadModel()
 
     def detectFromVideo(self):
         """
@@ -46,10 +46,10 @@ class ObjectDetectionWrapper:
         """
         This can process a single frame and detect objects in that frame.
         """
-        custom_objects = self.detector.CustomObjects(
+        custom_objects = self.frame_detector.CustomObjects(
             person=True, cell_phone=True, laptop=True
         )
-        detections = self.detector.detectObjectsFromImage(
+        detections = self.frame_detector.detectObjectsFromImage(
             custom_objects=custom_objects,
             input_image=frame,
             output_type="array",
