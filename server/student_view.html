@@ -14,6 +14,7 @@
         and sends a frame every 100ms.
     </p>
     <video autoplay></video>
+    <div id="output">Waiting for data...</div>
     <script>
         const WS_URL = 'http://127.0.0.1:8080'
         var socketio = io.connect(WS_URL)
@@ -30,14 +31,28 @@
             canvas.height = video.videoHeight;
             canvas.getContext('2d').drawImage(video, 0, 0);
             const data = canvas.toDataURL('image/png');
-            return {frame: data};
+            const withoutHeader = data.split(',')[1]; // remove header for backend
+            return {frame: withoutHeader, student_id: 'student123'};
         };        
-        const FPS = 10;
+        const FPS = 1;
         socketio.on('connect', () => {
             console.log(`Connected to ${WS_URL}`);
-            setInterval(() => {
-                socketio.emit('frame', getFrame());
-            }, 1000 / FPS);
+            socketio.emit('join', {student_id: 'student123'}, (data) => {
+                console.log(data);
+                setInterval(() => {
+                    socketio.emit('frame', getFrame(), (data) => {
+                        document.getElementById("output").textContent = JSON.stringify(data, null, 2);
+                        console.log(data);
+                    });
+                }, 1000 / FPS);
+            });
+        });
+
+        socketio.on('disconnect', (reason) => {
+            console.log(`Disconnected from ${WS_URL}`, {reason});
+            socketio.emit('leave', {student_id: 'student123'}, (data) => {
+                console.log(data);
+            });
         });
     </script>
 </body>
