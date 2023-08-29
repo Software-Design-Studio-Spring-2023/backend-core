@@ -12,3 +12,4 @@ yolov3.pt
 img*
 
 yolov3.pt
+client/node_modules/
