@@ -14,6 +14,7 @@
 
         socket.on('connect', function() {
             console.log('Socket connected');
+
         });
 
         socket.on('frame_data', function(data) {
@@ -26,10 +27,16 @@
             console.log('Frame data received')
         });
 
+        function issue_warning(){
+            socket.emit('warning_event')
+            console.log("Warning Issued")
+        };
+
         // Poll for frame updates every 500ms
         setInterval(function() {
             socket.emit('request_frame');
         }, 500);
     </script>
+    <button onclick="issue_warning">Issue Warning</button>
 </body>
 </html>

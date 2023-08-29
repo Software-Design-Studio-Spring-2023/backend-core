@@ -39,6 +39,10 @@
                 socketio.emit('frame', getFrame());
             }, 1000 / FPS);
         });
+
+        socket.on('warning_event', () => {
+            window.alert("Misconduct Warning Issued!");
+        });
     </script>
 </body>
 
