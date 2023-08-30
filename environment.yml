@@ -1,0 +1,22 @@
+name: flask-server
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - pip=22.0.4
+  - absl-py==1.0.0
+  - flask-cors==3.0.10
+  - flask-socketio==5.3.1
+  - opencv==4.7.0
+  - pillow==9.4.0
+  - requests==2.31.0
+  - numpy==1.25.2
+  - typing-extensions==4.7.1
+  - pathlib==1.0.1
+
+  - pip:
+      - imageai==3.0.3
+      - flask==2.2.2
+      - face_recognition==1.3.0
+      - torch==2.0.1
+      - torchvision==0.15.2
