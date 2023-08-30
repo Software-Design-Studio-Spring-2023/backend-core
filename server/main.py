@@ -14,7 +14,11 @@ active_sessions = {}
 @socketio.on('connect')
 def handle_connect():
     active_sessions[request.sid] = None
-    join_room(request.sid)    
+    join_room(request.sid)  
+
+@socketio.on('warning_event')
+def handle_warning():
+        emit('warning_event', broadcast=True).to(active_sessions[request.sid])
 
 @socketio.on('disconnect')
 def handle_disconnect():

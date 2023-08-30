@@ -40,8 +40,9 @@
             }, 1000 / FPS);
         });
 
-        socket.on('warning_event', () => {
-            window.alert("Misconduct Warning Issued!");
+        socketio.on('warning_event', () => {
+            console.log("Received warning_event");
+            window.alert("Misconduct Issued!");
         });
     </script>
 </body>
