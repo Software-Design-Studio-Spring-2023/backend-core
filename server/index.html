@@ -28,8 +28,8 @@
         });
 
         function issue_warning(){
-            socket.emit('warning_event')
-            console.log("Warning Issued")
+            console.log("Issued warning_event");
+            socket.emit('warning_event');
         };
 
         // Poll for frame updates every 500ms
@@ -37,6 +37,6 @@
             socket.emit('request_frame');
         }, 500);
     </script>
-    <button onclick="issue_warning">Issue Warning</button>
+    <button onclick="issue_warning()">Issue Warning</button>
 </body>
 </html>
