@@ -8,6 +8,8 @@ from cv2 import VideoWriter, VideoWriter_fourcc
 import numpy as np
 import base64
 from server.infrastructure.ObjectDetection import ObjectDetectionWrapper
+from flask_socketio import SocketIO, emit, join_room, leave_room, send
+from flask import Flask, Response, jsonify, request, render_template
 from server.infrastructure.FaceEncoder import FaceEncoder as FaceEncoderClass
 from server.infrastructure.FaceDetector import FaceDetector as FaceDetectorClass
 
@@ -46,7 +48,13 @@ def handle_join(data):
     ] = client_data  # not sure if we should use sid or student_id
     # (will have to be in the join or leave event if student_id)
     active_sessions[request.sid] = data["student_id"]
+    join_room(request.sid)
     return {"message": "Joined room"}
+
+
+@socketio.on("warning_event")
+def handle_warning():
+    emit("warning_event", broadcast=True).to(active_sessions[request.sid])
 
 
 @socketio.on("disconnect")
@@ -64,6 +72,7 @@ def handle_leave(data):
 
     # may want to analyse the video here and send the results to the host application
     # then delete VideoWriter object
+    leave_room(request.sid)
     return {"message": "Left room"}
 
 
