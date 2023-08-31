@@ -18,6 +18,7 @@
         });
 
         socket.on('active_sessions_list', function(data){
+            console.log('Active session list received');
             let dropdown = document.getElementById('studentSessions');
             dropdown.innerHTML = "";
 
@@ -50,7 +51,7 @@
             socket.emit('request_frame');
         }, 500);
     </script>
-    <select id="connectedStudents"></select>
+    <select id="studentSessions"></select>
     <button onclick="issue_warning()">Issue Warning</button>
 </body>
 </html>

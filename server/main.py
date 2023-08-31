@@ -23,7 +23,7 @@ def handle_warning(target_sid):
 
 @socketio.on('get_active_sessions')
 def send_active_sessions():
-    sessions_list = list(active_sessions.key())
+    sessions_list = list(active_sessions.keys())
     emit('active_sessions_list', {'sessions': sessions_list})
 
 @socketio.on('disconnect')
