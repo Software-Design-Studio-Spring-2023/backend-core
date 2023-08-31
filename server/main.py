@@ -17,8 +17,14 @@ def handle_connect():
     join_room(request.sid)  
 
 @socketio.on('warning_event')
-def handle_warning():
-        emit('warning_event', broadcast=True).to(active_sessions[request.sid])
+def handle_warning(target_sid):
+    if target_sid in active_sessions:
+        emit('warning_event', room=target_sid)
+
+@socketio.on('get_active_sessions')
+def send_active_sessions():
+    sessions_list = list(active_sessions.key())
+    emit('active_sessions_list', {'sessions': sessions_list})
 
 @socketio.on('disconnect')
 def handle_disconnect():

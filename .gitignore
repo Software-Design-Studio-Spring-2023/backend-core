@@ -6,3 +6,10 @@ __pycache__/
 ./server/infrastructure/output/
 
 client/node_modules/
+
+yolov3.pt
+
+img*
+
+yolov3.pt
+client/node_modules/

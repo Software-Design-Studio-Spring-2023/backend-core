@@ -13,6 +13,7 @@ Path(cwd + "validation").mkdir(exist_ok=True)
 
 class FaceEncoder:
     DEFAULT_ENCODINGS_PATH = Path(cwd + "/output/encodings.pkl")
+
     def encode_known_faces(
         model: str = "hog", encodings_location: Path = DEFAULT_ENCODINGS_PATH
     ) -> None:
@@ -39,12 +40,21 @@ class FaceEncoder:
             pickle.dump(name_encodings, f)
 
     def add_student(
-        self, label: str, image: BinaryIO, encodings_location: Path = DEFAULT_ENCODINGS_PATH
+        self,
+        label: str,
+        image: BinaryIO,
+        encodings_location: Path = DEFAULT_ENCODINGS_PATH,
     ) -> None:
         """
         Adds a new image to the training set.
         """
         Path(cwd + "training/" + label).mkdir(exist_ok=True)
-        image.save(cwd + "training/" + label + "/img_" + str(len(os.listdir(cwd + "training/" + label)) + 1) + ".jpeg")
+        image.save(
+            cwd
+            + "training/"
+            + label
+            + "/img_"
+            + str(len(os.listdir(cwd + "training/" + label)) + 1)
+            + ".jpeg"
+        )
         FaceEncoder.encode_known_faces()
-    

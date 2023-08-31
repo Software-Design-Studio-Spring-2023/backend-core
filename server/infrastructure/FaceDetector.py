@@ -8,9 +8,10 @@ import face_recognition
 from werkzeug.datastructures import FileStorage
 
 # get pwd
-cwd = Path(__file__).parent.resolve().as_posix() + "/"  
+cwd = Path(__file__).parent.resolve().as_posix() + "/"
 
-class FaceDetector():
+
+class FaceDetector:
     """
     Class for detecting faces in images.
     """
